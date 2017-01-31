@@ -28,8 +28,8 @@ This is a sketch for the SainSmart 1.8" TFT display.
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
 #include <SPI.h>
-#include <DateTime.h>
-#include <DateTimeStrings.h>
+//#include <DateTime.h>
+//#include <DateTimeStrings.h>
 
 // For the breakout, you can use any (2 or) 3 pins
 //#define sclk 13
@@ -86,8 +86,6 @@ screen, or within the general size of the clock itself.
 #define ptsDim0 8   // Columns
 #define ptsDim1 6   // Rows
 
-#define fgColor  ST7735_BLUE
-
 
 //  Global variables used in the program
 uint16_t scrWidth;    //Screen width
@@ -109,7 +107,14 @@ byte h = 0, m = 0, s = 0, q = 0, qm = 0;
 byte hLast = 0, mLast, sLast = 0;
 
 //  Colors
-uint16_t bgColor = tft.Color565(150, 150, 200);
+uint16_t _BLUE_GREY = tft.Color565(150, 150, 200);
+uint16_t _GREY = tft.Color565(127, 127, 127);
+uint16_t _AMBER = tft.Color565(90, 60, 0);
+
+uint16_t scrColor = ST7735_BLACK;   //  The screen color
+uint16_t fgColor = ST7735_BLUE;          //  The "highlight" color of the shapes
+uint16_t bgColor = _GREY;      //  The background color of the shapes
+
 
 //  Define the center and radius of the circle to help draw the top part
 uint16_t x0, y0;
@@ -137,7 +142,7 @@ void setup(void) {
   Serial.println("Hello, world.");
   Serial.println("Initializing...");
   
-  tft.fillScreen(ST7735_BLACK);
+  tft.fillScreen(scrColor);
   tft.setRotation(rotation);
   scrHeight = tft.height();
   scrWidth = tft.width();
@@ -301,7 +306,7 @@ void sec(uint16_t color) {
   uint16_t i = 0;
   uint16_t bgColor = tft.Color565(150, 150, 200);
 
-  tft.fillRect(0, 130, tft.width(), 10, ST7735_BLACK);
+  tft.fillRect(0, 130, tft.width(), 10, scrColor);
   for (i = 1; i <= 64; i++){
     tft.drawFastVLine(2*i, 130, 10, bgColor);
     tft.drawFastVLine(2*i+2, 130, 10, bgColor);
@@ -319,10 +324,10 @@ void sec(uint16_t color) {
     tft.drawFastVLine(2*i+26, 130, 10, bgColor);
     tft.drawFastVLine(2*i+28, 130, 10, bgColor);
 
-    tft.drawFastVLine(2*i, 130, 10, ST7735_BLACK);
+    tft.drawFastVLine(2*i, 130, 10, scrColor);
     delay(0);
   }
-  tft.drawFastVLine(2*i+2, 130, 10, ST7735_BLACK);
+  tft.drawFastVLine(2*i+2, 130, 10, scrColor);
  }
  
 /**********************************************************************
